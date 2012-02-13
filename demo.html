@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta property="dc:creator" content="Kaarel Kaljurand"/>
+<meta property="dc:language" content="et"/>
+
+<script type="text/javascript" src="wn/et/wn.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript">$(document).ready(function() { 
+
+function make_synset(id) {
+	var id_words = $("<ul></ul>");
+	var ids = wn['ids'];
+	if (ids == undefined) {
+		return;
+	}
+	var selected_id = ids[id];
+	if (selected_id == undefined) {
+		return;
+	}
+	$.each(selected_id['words'], function(index1, item1) {
+		$("<li></li>")
+			.html(item1)
+			.addClass("clickable")
+			.click(function() {
+				$("#input_word").val(item1);
+				$("#button_word").click();
+			})
+			.appendTo(id_words);
+	});
+	return $("<li><b></b> <div></div></li>")
+		.find("b")
+			.addClass("clickable")
+			.html("#" + id)
+			.attr("title", id)
+			.click(function() {
+				$("#div_history").append("<li><i>" + id + "</i></li>");
+				$("#div_sense").empty();
+				$("#div_sense").append("<p><b><i>Sünonüümid</i></b></p>");
+				$("#div_sense").append(id_words);
+				$.each(selected_id, function(index2, item2) {
+					if (index2 == "words") {
+						return;
+					}
+					$("#div_sense").append("<p><b>" + index2 + "</b></p>");
+					var list = $("<ul></ul>").attr("title", index2);
+					$.each(selected_id[index2], function(index3, item3) {
+						var el = make_synset(item3)
+						if (el != undefined) {
+							el.appendTo(list);
+						}
+					});
+					$("#div_sense").append(list);
+				});
+				$("#div_word").hide();
+				$("#div_sense").show();
+			})
+		.end()
+		.find("div")
+			.html(id_words)
+		.end();
+}
+
+$("#button_word").click(function(event) {
+	var word = $("#input_word").val();
+	var word_ids = wn['words'][word];
+	if (word_ids == undefined) {
+		$("#span_search").show();
+		return;
+	}
+
+	$("#div_history").append("<li>" + word + "</li>");
+	$("#span_search").hide();
+
+	$("#p_word").empty().append("Sõnal <b>" + word + "</b> on " + word_ids.length + " tähendus(t).");
+
+	var list = $("#ul_sets").empty();
+
+	$.each(word_ids, function(index, item) {
+		make_synset(item).appendTo(list);
+	});
+	$("#div_sense").hide();
+	$("#div_word").show();
+}); 
+
+/*
+$.getJSON("http://localhost:8000/wn.json", function(json) {
+	wn = json;
+})
+.success(function() { alert("second success"); })
+.error(function() { alert("error"); })
+.complete(function() { alert("complete"); });
+*/
+
+} );</script>
+
+<link rel="stylesheet" title="default" href="wn-browse.css" media="screen" type="text/css"/>
+
+<title>wn-browse</title>
+</head>
+
+<body>
+
+<div id="div_search">
+<input id="input_word" type="text" name="word" value="viis"/>
+<button id="button_word" type="button">Leia!</button>
+<span id="span_search" style="color: red; display: none">Sellist sõna pole :(</span>
+</div>
+
+<div id="div_word">
+<p id="p_word"></p>
+<ul id="ul_sets">
+</ul>
+</div>
+
+<div id="div_sense">
+</div>
+
+<div id="div_history">
+<p>Ajalugu</p>
+<ol>
+</ol>
+</div>
+
+</body>
+</html>

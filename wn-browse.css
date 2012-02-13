@@ -1,0 +1,42 @@
+div {
+	margin: 0;
+	padding: 0;
+}
+
+.clickable {
+	color: navy;
+}
+
+.clickable:hover {
+	background-color: yellow;
+}
+
+#div_word {
+	display: none;
+	padding-left: 1em;
+	border-left: 3px solid green;
+}
+
+#div_sense {
+	display: none;
+	padding-left: 1em;
+	border-left: 3px solid #cc0000;
+}
+
+#div_search {
+	padding: 0.2em 0.2em 0.2em 0.2em;
+	margin-bottom: 1em;
+}
+
+#div_history {
+	position: absolute;
+	right: 0.3em;
+	top: 0.3em;
+	padding: 0.2em 0.2em 0.2em 0.2em;
+	border: 1px dotted olive;
+	background-color: #eef;
+}
+
+body {
+	font-family: sans-serif;
+}
