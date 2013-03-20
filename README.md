@@ -41,3 +41,8 @@ TODO
   - browser back-forward navigation
   - make it more visual (synsets as circles, relations as labeled directed arrows, history as bold arrows)
   - support for multilinguality
+
+Similar projects
+----------------
+
+  - <http://wordties.cst.dk/>
